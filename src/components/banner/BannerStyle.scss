@@ -1,0 +1,46 @@
+.banner {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 15rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 2px 0 rgba(0 0 0 / 10%);
+    margin-bottom: 4rem;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: rgba(0 0 0 / 60%);
+    }
+
+    &-home {
+        background: url("../../assets/banner.jpg") no-repeat center / cover;
+    }
+
+    &-about {
+        background: url("../../assets/banner_second.jpg") no-repeat center / cover;
+    }
+
+    @media only screen and (max-width: 768px) {
+        height: 6.875rem;
+        margin-bottom: 2rem;
+    }
+}
+
+.title {
+    position: absolute;
+    color: var(--color-white);
+    font-size: 3rem;
+
+    
+    @media only screen and (max-width : 768px) {
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+}
