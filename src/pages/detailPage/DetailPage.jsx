@@ -1,24 +1,28 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CollapseBar from "../../components/collapseBar/CollapseBar";
 import { useContext, useEffect, useState } from "react";
 import logements from "../../data/logements.json"
-import star from "../../assets/star.svg"
-import grayStar from "../../assets/grayStar.svg"
 import "./DetailPageStyle.scss"
 import "../../utils/Atoms.scss"
 import Carousel from "../../components/carousel/Carousel";
 import { GlobalContext } from "../../utils/Context";
+import StarNote from "../../components/starNote/starNote";
+import UserProfile from "../../components/userProfile/UserProfile";
+import Tag from "../../components/tag/Tag";
 
 function DetailPage ({}) {
     const { adId }= useParams()
     const [ logement, setLogement ] = useState({})
-    const [ starsArray, setStarsArray ] = useState([])
     const { device } = useContext(GlobalContext)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const ad = logements.find(ad => ad.id === adId)
+        if (ad === undefined) {
+            navigate('/error')
+            return
+        }
         setLogement(ad)
-        setStarsArray(Array.from({ length: 5 }, (_, index) => index < parseInt(ad.rating)))
     }, [])
 
     return (
@@ -36,79 +40,26 @@ function DetailPage ({}) {
                         </div>
 
                         { device !== 'mobile' &&
-                            <div className="detail-container-information-wrapper-profil">
-                                <div className="detail-container-information-wrapper-profil-name">
-                                    <span>{ logement.host?.name.split(' ')[0] }</span>
-                                    <span>{ logement.host?.name.split(' ')[1] }</span>
-                                </div>
-
-                                <div className="detail-container-information-wrapper-profil-image">
-                                    <img src={ logement.host?.picture } alt={ `photo de profil de ${ logement.host?.name }` } />
-                                </div>
-                            </div>
+                            <UserProfile logement={logement} />
                         }
                     </div>
 
                     <div className="detail-container-information-wrapper">
                         <div className="detail-container-information-wrapper-content start">
                             { logement.tags?.map((tag, index) => (
-                                <span className="detail-container-information-wrapper-content-tag" key={ index }>{ tag }</span>
+                                <Tag key={index} tag={tag} />
                             ))}
                         </div>
 
                         {device !== 'mobile' &&
-                            <div className="detail-container-information-wrapper-content end">
-                                { starsArray.map((activated, index) => (
-                                    activated ? 
-                                    <img 
-                                        key={ index } 
-                                        src={ star }
-                                        alt='étoile pleine'
-                                        className="detail-container-information-wrapper-content-img"
-                                    />
-                                    :
-                                    <img 
-                                        key={ index }
-                                        src={ grayStar }
-                                        alt='étoile vide'
-                                        className="detail-container-information-wrapper-content-img"
-                                    />
-                                ))}
-                            </div>
+                            <StarNote note={logement.rating} />
                         }
                     </div>
 
                     { device === 'mobile' &&
                         <div className="detail-container-information-wrapper">
-                            <div className="detail-container-information-wrapper-content start">
-                                { starsArray.map((activated, index) => (
-                                    activated ? 
-                                    <img 
-                                        key={ index } 
-                                        src={ star }
-                                        alt='étoile pleine'
-                                        className="detail-container-information-wrapper-content-img"
-                                    />
-                                    :
-                                    <img 
-                                        key={ index }
-                                        src={ grayStar }
-                                        alt='étoile vide'
-                                        className="detail-container-information-wrapper-content-img"
-                                    />
-                                ))}
-                            </div>
-
-                            <div className="detail-container-information-wrapper-profil">
-                                <div className="detail-container-information-wrapper-profil-name">
-                                    <span>{ logement.host?.name.split(' ')[0] }</span>
-                                    <span>{ logement.host?.name.split(' ')[1] }</span>
-                                </div>
-
-                                <div className="detail-container-information-wrapper-profil-image">
-                                    <img src={ logement.host?.picture } alt={ `photo de profil de ${ logement.host?.name }` } />
-                                </div>
-                            </div>
+                            <StarNote note={logement.rating} />
+                            <UserProfile logement={logement} />
                         </div>
                     }
 

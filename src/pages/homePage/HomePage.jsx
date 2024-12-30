@@ -3,9 +3,9 @@ import logements from "../../data/logements.json"
 import { useNavigate } from "react-router-dom"
 import "../../utils/Atoms.scss"
 import "./HomePageStyle.scss"
+import Ad from "../../components/ad/Ad"
 
 function HomePage() {
-    const navigate = useNavigate()
 
     return (
         <div className="page home">
@@ -13,14 +13,7 @@ function HomePage() {
 
             <div className="home-container">
                 { logements.map((logement, index) => (
-                    <article 
-                        className="home-container-ad" 
-                        key={ index }
-                        onClick={ () => navigate(`/detail/${ logement.id }`) }
-                    >
-                        <img src={ logement.cover } alt={ logement.title } />
-                        <h2>{ logement.title }</h2>
-                    </article>
+                    <Ad key={index} logement={logement} />
                 ))}
             </div>
         </div>
